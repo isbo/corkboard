@@ -37,6 +37,11 @@ func postClip(c *gin.Context) {
 
 func deleteClip(c *gin.Context) {
 	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing ID"})
+		return
+	}
+
 	if _, ok := clips[id]; ok {
 		delete(clips, id)
 	} else {
