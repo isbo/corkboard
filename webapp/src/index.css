@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.clip {
+  color: grey;
+  padding-top: 5px;
+  font-size: 15px;
+}

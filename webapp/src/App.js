@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
+
 import './App.css';
+import { Stack, Button, Card, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import axios from 'axios'
 import Clip from './components/Clip'
 
 const App = () => {
   const [clips, setClips] = useState([])
-  const [newClip, setNewClip] = useState('a new note..')
+  const [newClip, setNewClip] = useState('')
 
   useEffect(() => {
     console.log('useEffect')
@@ -22,7 +26,7 @@ const App = () => {
     formData.append('content', newClip)
     axios.post('http://localhost:6119/clips', formData)
     .then(response => {
-      setClips(clips.concat(response.data))
+      setClips(old => [response.data, ...old])
       setNewClip('')  
     })
   }
@@ -40,19 +44,34 @@ const App = () => {
   }
 
   return (
-    <div>
-      <hi> New Clip </hi>
-      <form onSubmit={ addClip }>
-        <input value={ newClip } onChange={handleClipChange}/>
-        <button type='submit'>Save</button>
-      </form>
+    <div className='app'>
+      <h1 className="text-center mb-4">📌 Corkboard 📌</h1>
 
-      <h1> Clips </h1>
-        {clips.map(clip => 
-          <li><Clip key={clip.id} clip={clip} deleteClip={() => deleteClip(clip.id)} /> </li>  
-        )}
+      <Form onSubmit={addClip}>
+      <Form.Group>
+        <Form.Label><b>New Clip</b></Form.Label>
+        <Form.Control as="textarea" rows={2} placeholder="Paste here..." value={newClip} onChange={handleClipChange}/>
+      </Form.Group>
+      <br/>
+      <Stack direction="horizontal" gap={1}>
+        <Button variant="outline-primary mb-3" type='submit'>Save</Button>
+        <Button variant="outline-secondary mb-3" onClick={ () => { setNewClip('') } }>Clear</Button>
+      </Stack>
+      </Form>
+
+     {clips.map(clip =>
+      <>
+        <br />
+          <Card border="secondary">
+          <Card.Body>
+            <div classname="clip">
+              <Clip key={clip.id} clip={clip} deleteClip={() => deleteClip(clip.id)} /> 
+            </div>  
+          </Card.Body>
+        </Card>
+        </>
+      )}
     </div>
-  );
+  )
 }
-
 export default App;
