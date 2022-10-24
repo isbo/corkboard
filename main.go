@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 )
 
@@ -77,5 +78,6 @@ func main() {
 	router.GET("/clips/:id", getClipById)
 	router.POST("/clips", postClip)
 	router.DELETE("/clips/:id", deleteClip)
+	router.Use(static.Serve("/", static.LocalFile("webapp/build/", false)))
 	router.Run("localhost:6119")
 }
