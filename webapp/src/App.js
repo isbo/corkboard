@@ -7,13 +7,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 import Clip from './components/Clip'
 
+
 const App = () => {
   const [clips, setClips] = useState([])
   const [newClip, setNewClip] = useState('')
 
   useEffect(() => {
     console.log('useEffect')
-    axios.get('http://localhost:6119/clips')
+    axios.get('/clips')
     .then(response => {
       console.log('promise finished')
       setClips(response.data)
@@ -24,7 +25,7 @@ const App = () => {
     event.preventDefault()
     const formData = new FormData()
     formData.append('content', newClip)
-    axios.post('http://localhost:6119/clips', formData)
+    axios.post('/clips', formData)
     .then(response => {
       setClips(old => [response.data, ...old])
       setNewClip('')  
@@ -36,7 +37,7 @@ const App = () => {
   }
 
   const deleteClip = (id) => {
-    axios.delete('http://localhost:6119/clips/' + id)
+    axios.delete('/clips/' + id)
     .then(response => {
       console.log('promise finished')
       setClips(clips.filter(clip => clip.id !== id))
